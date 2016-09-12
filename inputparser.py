@@ -1,6 +1,6 @@
 import nltk.data
-from nltk.tokenize import wordpunct_tokeniz
-
+from nltk.tokenize import wordpunct_tokenize
+#from nltk.tokenize import word_tokenize
 
 def conv_sentperline(filename):
 	sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
@@ -24,9 +24,15 @@ def file_to_datapoint(filename):
 		words = wordpunct_tokenize(sent)
 		for word in words:
 			string = string + word +'\t' + tag+'\n'
+			#print(string)
 		string = string + '\n'
 
-	return string[:-1]
+	string = string[:-1]
+	fo = open(filename,'w')
+	fo.seek(0)
+	fo.write(string)
+	fo.close
+	return string
 
 
         
@@ -39,4 +45,4 @@ def file_to_datapoint(filename):
 
 
 
-conv_sentperline("big.txt")
+file_to_datapoint("big.txt")
