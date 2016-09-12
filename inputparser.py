@@ -31,4 +31,22 @@ def file_to_datapoint_without_tag(filename):
 	fo.close
 	return string
 
-file_to_datapoint_without_tag("big.txt")
+def mergewithtag(input_file,tag):
+	string=""
+	in1 = open(input_file,"r+")
+	in2 = open(tag,"r+")
+	out = open(input_file[:-4]+"_final.txt",'w')
+	for line,line1 in zip(in1,in2):
+		if line == "\n":
+			string=string+line
+		else:
+			string = string + line[:-1] +"\t" +line1
+	out.seek(0)
+	out.write(string)
+	out.close()
+	in1.close()
+	in2.close() 
+
+#file_to_datapoint_without_tag("big.txt")
+
+mergewithtag("big_col.txt","big_col.txt")
