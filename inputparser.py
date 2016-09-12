@@ -14,35 +14,21 @@ def conv_sentperline(filename):
 	fo.close
 	return sent
 
-
-
-def file_to_datapoint(filename):
+def file_to_datapoint_without_tag(filename):
 	string=""
-	tag = "O"
 	sentences = conv_sentperline(filename)
 	for sent in sentences:
 		words = wordpunct_tokenize(sent)
 		for word in words:
-			string = string + word +'\t' + tag+'\n'
+			string = string + word+'\n'
 			#print(string)
 		string = string + '\n'
 
 	string = string[:-1]
-	fo = open(filename,'w')
+	fo = open(filename[:-4]+'_col.txt','w')
 	fo.seek(0)
 	fo.write(string)
 	fo.close
 	return string
 
-
-        
-
-
-
-
-
-
-
-
-
-file_to_datapoint("big.txt")
+file_to_datapoint_without_tag("big.txt")
