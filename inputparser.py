@@ -36,11 +36,24 @@ def mergewithtag(input_file,tag):
 	in1 = open(input_file,"r+")
 	in2 = open(tag,"r+")
 	out = open(input_file[:-4]+"_final.txt",'w')
-	for line,line1 in zip(in1,in2):
-		if line == "\n":
-			string=string+line
+	#print(len(in1))
+	file1=[]
+	file2=[]
+	for line in in1:
+		file1.append(line)
+
+	for line in in2:
+		file2.append(line)
+
+	j=0
+
+	for i in range(0,len(file1)):
+		if file1[i] == "\n":
+			string = string+line
+			j=j+1
 		else:
-			string = string + line[:-1] +"\t" +line1
+			string = string + file1[i][:-1]+"\t"+file2[i-j]
+
 	out.seek(0)
 	out.write(string)
 	out.close()
