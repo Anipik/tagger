@@ -3,7 +3,7 @@ import os, sys
 import nltk.data
 from nltk.tokenize import wordpunct_tokenize
 reload(sys)
-sys.setdefaultencoding('utf-8')
+sys.setdefaultencoding("utf-8")
 
 sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
 
@@ -11,12 +11,13 @@ def tokenize_phrase(phrase):
 	return wordpunct_tokenize(phrase)
 
 def conv_sentperline(text):
-	sent = sent_detector.tokenize(text.strip())
-	return sent
+    text = ' '.join(text.split())
+    sent = sent_detector.tokenize(text.strip())
+    return sent
 
 def file_to_datapoint_without_tag(filename):
 	with open(filename+'.txt', 'rb') as f:
-		sentences = conv_sentperline(f.read())
+		sentences = conv_sentperline(f.read().decode('utf-8'))
 		words = [tokenize_phrase(sentence) for sentence in sentences]
 		text = '\n\n'.join(['\n'.join(sent) for sent in words])
         #debug code
@@ -24,22 +25,22 @@ def file_to_datapoint_without_tag(filename):
         # fo.write(text)
         # fo.close()
         mergewithtag(filename, words)
-	
+
 
 def mergewithtag(filename, words):
     string=""
     in2 = open(filename+'.out',"rb")
     out = open(filename+".final",'wb')
-    file2 = in2.read().split()
+    file2 = in2.read().decode('utf-8').split()
     j=0
     offset = 0
     for sentence in words:
-        string += '\n'.join([sentence[i]+'\t'+file2[offset+i]  for i in xrange(len(sentence))])
+        string += '\n'.join([sentence[i]+'\t'+file2[offset+i] for i in xrange(len(sentence)) if sentence[i] != ' '])
         offset += len(sentence)
         string += '\n\n'
     out.write(string)
     out.close()
-    in2.close() 
+    in2.close()
 
 def convert_output(filename):
     tags = ['HAB', 'HABCONT', 'BAC', 'BACCONT', 'GEO', 'GEOCONT']
@@ -99,9 +100,19 @@ filenames = []
 for file in os.listdir(path):
     if file.endswith(".txt"):
         filenames.append(file[:-4])
+
+#for training
 for filename in filenames:
 	print(path+filename)
 	convert_output(path + filename)
 	file_to_datapoint_without_tag(path + filename)
-# convert_output('data/BioNLP-ST-2016_BB-cat+ner_train/BB-cat+ner-19622846')
-# file_to_datapoint_without_tag('data/BioNLP-ST-2016_BB-cat+ner_train/BB-cat+ner-19622846')
+
+# #for test data
+# for filename in filenames:
+#     print (path+filename)
+#     with open(path+filename+'.txt', 'rb') as f:
+#         sentences = conv_sentperline(f.read().decode('utf-8'))
+#         words = [tokenize_phrase(sentence) for sentence in sentences]
+#         text = '\n\n'.join(['\n'.join(sent) for sent in words])
+#         with open(path+filename+'.input', 'wb') as f1:
+#             f1.write(text)

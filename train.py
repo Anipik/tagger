@@ -29,7 +29,7 @@ optparser.add_option(
     help="Test set location"
 )
 optparser.add_option(
-    "-s", "--tag_scheme", default="iobes",
+    "-s", "--tag_scheme", default="iob",
     help="Tagging scheme (IOB or IOBES)"
 )
 optparser.add_option(
@@ -146,9 +146,9 @@ dev_sentences = loader.load_sentences(opts.dev, lower, zeros)
 test_sentences = loader.load_sentences(opts.test, lower, zeros)
 
 # Use selected tagging scheme (IOB / IOBES)
-update_tag_scheme(train_sentences, tag_scheme)
-update_tag_scheme(dev_sentences, tag_scheme)
-update_tag_scheme(test_sentences, tag_scheme)
+# update_tag_scheme(train_sentences, tag_scheme)
+# update_tag_scheme(dev_sentences, tag_scheme)
+# update_tag_scheme(test_sentences, tag_scheme)
 
 # Create a dictionary / mapping of words
 # If we use pretrained embeddings, we add them to the dictionary.
